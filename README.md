@@ -97,4 +97,5 @@ research-game-idea-skills/
 - 調査ソース（Reddit / HN のシグナル）
 - 穴場である理由
 - 5軸評価表
+- **MVP スコープ**（Must Have / Out of Scope / 完成の定義）
 - 次のアクション案（バリデーション・プロトタイプのステップ）
