@@ -21,6 +21,9 @@ research-game-idea-skills/
 ├── SKILL.md                          # スキル本体（Claude への指示）
 ├── README.md                         # このファイル
 ├── memo.txt                          # 作成時のメモ
+├── scripts/
+│   ├── fetch_reddit.py               # Reddit からゲーム関連投稿を収集するスクリプト
+│   └── fetch_hn.py                   # Hacker News からゲーム関連投稿を収集するスクリプト
 ├── references/
 │   ├── reddit-research.md            # Reddit 調査手順・対象サブレディット一覧
 │   ├── hackernews-research.md        # Hacker News 調査手順・シグナル抽出方法
@@ -44,12 +47,30 @@ research-game-idea-skills/
 
 > 「調査対象の年号を教えてください（例：2024年）。」
 
-### Step 2: リサーチ（並列実行）
+### Step 2: リサーチ（スクリプト実行）
 
-| ソース | 調査内容 |
-|--------|----------|
-| **Reddit** | r/indiegaming, r/iosgaming, r/SuggestAGame 等のペインポイントを収集 |
-| **Hacker News** | 高ポイント・高コメントのゲーム関連投稿を収集 |
+スクリプトを使ってデータを自動収集します。
+
+```bash
+# Reddit: 17サブレディットからゲーム関連投稿を収集
+python scripts/fetch_reddit.py --year {year} --output /tmp/reddit_raw.json
+
+# Hacker News: ゲーム関連クエリで投稿を収集
+python scripts/fetch_hn.py --year {year} --output /tmp/hn_raw.json
+```
+
+| ソース | スクリプト | 収集対象 |
+|--------|-----------|----------|
+| **Reddit** | `fetch_reddit.py` | r/patientgamers, r/indiegaming, r/iosgaming, r/SuggestAGame 等17サブレディット |
+| **Hacker News** | `fetch_hn.py` | "indie game", "Show HN game", "roguelike" 等15クエリ |
+
+**スクリプトのオプション:**
+
+```bash
+# 取得件数・出力先を変更する場合
+python scripts/fetch_reddit.py --year 2024 --limit 50 --output /tmp/reddit_raw.json
+python scripts/fetch_hn.py --year 2024 --min-points 10 --output /tmp/hn_raw.json
+```
 
 ### Step 3: ゲームアイデアの合成
 

@@ -17,12 +17,27 @@ Wait for their answer. Use `{year}` throughout the research to focus on recent t
 
 ## Step 2: Research Sources
 
-Run research across two sources in parallel. Detailed search strategies are in the references directory — read them before searching.
+Run research across two sources in parallel using the provided scripts. Detailed search strategies are in the references directory — read them before proceeding.
 
-- **Reddit pain points** → See `references/reddit-research.md`
-- **Hacker News popular posts** → See `references/hackernews-research.md`
+### Reddit pain points
+Run `scripts/fetch_reddit.py` to collect game-related Reddit posts:
 
-Use `WebSearch` and `WebFetch` to gather real data. Don't fabricate findings — if you can't find something, say so.
+```bash
+python scripts/fetch_reddit.py --year {year} --output /tmp/reddit_raw.json
+```
+
+Then read `/tmp/reddit_raw.json` and extract the top pain points. See `references/reddit-research.md` for guidance on interpreting the results.
+
+### Hacker News popular posts
+Run `scripts/fetch_hn.py` to collect game-related HN posts:
+
+```bash
+python scripts/fetch_hn.py --year {year} --output /tmp/hn_raw.json
+```
+
+Then read `/tmp/hn_raw.json` and extract the high-engagement posts. See `references/hackernews-research.md` for guidance on interpreting the results.
+
+Don't fabricate findings — if the scripts return no useful data, say so.
 
 ## Step 3: Synthesize Game Ideas
 
