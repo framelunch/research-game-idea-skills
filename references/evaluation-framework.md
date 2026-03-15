@@ -1,5 +1,19 @@
 # Evaluation Framework for Game Ideas
 
+## Idea Selection Criteria
+
+Before scoring, verify each candidate idea meets these minimum criteria:
+
+- **Pain point driven**: Addresses a pain point or unmet desire expressed by real users in the research sources
+- **Feasible scope**: Buildable by a team of 1–3 developers without AAA-level resources
+- **Revenue path**: Has a plausible path to revenue on mobile or Steam (or both)
+
+Discard ideas that fail any of these before applying the scoring rubric below.
+
+---
+
+## Scoring Rubric
+
 Rate each game idea across five dimensions on a scale of **1–5**. Be honest — a lower score isn't a disqualifier, it's information.
 
 ---

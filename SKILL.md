@@ -57,14 +57,10 @@ Don't fabricate findings — if the scripts return no useful data, say so.
 
 ## Step 3: Synthesize Game Ideas
 
-From your research, identify **3–5 niche game ideas** that:
-- Address a pain point or unmet desire expressed by real users
-- Are feasible for a team of 1–3 developers
-- Have a plausible path to revenue on mobile or Steam (or both)
+From your research, identify **3–5 niche game ideas**.
 
-For each idea, provide a structured report using the format in `references/output-template.md`.
-
-Evaluate each idea using the 5-point framework defined in `references/evaluation-framework.md`.
+Apply the selection criteria and 5-point scoring rubric defined in `references/evaluation-framework.md`.
+For each idea, produce a structured report using the format in `references/output-template.md`.
 
 ## Step 4: Save and Present Results
 
@@ -105,5 +101,5 @@ Apply fixes directly. Only mention issues to the user if a fix requires their in
 | `references/reddit-research.md` | Which subreddits to search, what to look for, how to extract pain points |
 | `references/hackernews-research.md` | How to find game-related HN posts with high engagement |
 | `references/qiita-research.md` | How to find game-related Qiita articles and extract Japanese market signals |
-| `references/evaluation-framework.md` | 5-point scoring rubric for each evaluation dimension |
+| `references/evaluation-framework.md` | Idea selection criteria + 5-point scoring rubric |
 | `references/output-template.md` | Exact output format for each game idea |
