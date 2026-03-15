@@ -85,11 +85,27 @@ def is_pain_point(post: dict) -> bool:
     return any(kw in title or kw in flair for kw in PAIN_SIGNAL_KEYWORDS)
 
 
+def date_range_for_year(year: int) -> tuple[float, float]:
+    """Return (start_unix, end_unix) for the target year.
+
+    If year == current year (i.e. the year hasn't finished), use a rolling
+    12-month window ending now instead of Jan 1 – Dec 31.
+    """
+    now = datetime.now(timezone.utc)
+    if year >= now.year:
+        one_year_ago = now.replace(year=now.year - 1)
+        return one_year_ago.timestamp(), now.timestamp()
+    else:
+        start = datetime(year, 1, 1, tzinfo=timezone.utc)
+        end = datetime(year, 12, 31, 23, 59, 59, tzinfo=timezone.utc)
+        return start.timestamp(), end.timestamp()
+
+
 def filter_by_year(post: dict, year: int) -> bool:
-    """Filter posts created in the given year."""
+    """Filter posts created within the target year's date range."""
     created = post.get("created_utc", 0)
-    post_year = datetime.fromtimestamp(created, tz=timezone.utc).year
-    return post_year == year
+    start, end = date_range_for_year(year)
+    return start <= created <= end
 
 
 def score_post(post: dict) -> int:

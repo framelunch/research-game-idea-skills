@@ -39,11 +39,29 @@ GAME_QUERIES = [
 ALGOLIA_BASE = "https://hn.algolia.com/api/v1/search"
 
 
+def date_range_for_year(year: int) -> tuple[int, int]:
+    """Return (start_unix, end_unix) for the target year.
+
+    If year == current year (i.e. the year hasn't finished), use a rolling
+    12-month window ending today instead of Jan 1 – Dec 31. This ensures we
+    capture a full year's worth of data even when the calendar year is partial.
+    """
+    now = datetime.now(timezone.utc)
+    if year >= now.year:
+        # Rolling window: exactly 1 year back from today
+        one_year_ago = now.replace(year=now.year - 1)
+        return int(one_year_ago.timestamp()), int(now.timestamp())
+    else:
+        # Completed calendar year
+        start = datetime(year, 1, 1, tzinfo=timezone.utc)
+        end = datetime(year, 12, 31, 23, 59, 59, tzinfo=timezone.utc)
+        return int(start.timestamp()), int(end.timestamp())
+
+
 def fetch_hn_posts(query: str, year: int, min_points: int = 5) -> list[dict]:
     """Fetch HN posts matching a query within the given year."""
     # Build date range for the year
-    year_start = int(datetime(year, 1, 1, tzinfo=timezone.utc).timestamp())
-    year_end = int(datetime(year, 12, 31, 23, 59, 59, tzinfo=timezone.utc).timestamp())
+    year_start, year_end = date_range_for_year(year)
 
     params = urllib.parse.urlencode({
         "query": query,

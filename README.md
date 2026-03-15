@@ -6,7 +6,7 @@
 
 ## 概要
 
-Reddit のペインポイントと Hacker News の高エンゲージメント投稿をリサーチし、モバイルアプリ・Steam 向けの未開拓ゲーム機会を特定します。
+Reddit のペインポイント、Hacker News の高エンゲージメント投稿、Qiita の個人開発者記事をリサーチし、モバイルアプリ・Steam 向けの未開拓ゲーム機会を特定します。Qiita により**国内市場（日本語圏）の需要**も把握できます。
 
 **トリガーワード例:**
 - 「穴場のゲームを探したい」「ゲームアイデア調査」「インディーゲーム市場」
@@ -23,10 +23,12 @@ research-game-idea-skills/
 ├── memo.txt                          # 作成時のメモ
 ├── scripts/
 │   ├── fetch_reddit.py               # Reddit からゲーム関連投稿を収集するスクリプト
-│   └── fetch_hn.py                   # Hacker News からゲーム関連投稿を収集するスクリプト
+│   ├── fetch_hn.py                   # Hacker News からゲーム関連投稿を収集するスクリプト
+│   └── fetch_qiita.py                # Qiita からゲーム関連記事を収集するスクリプト
 ├── references/
 │   ├── reddit-research.md            # Reddit 調査手順・対象サブレディット一覧
 │   ├── hackernews-research.md        # Hacker News 調査手順・シグナル抽出方法
+│   ├── qiita-research.md             # Qiita 調査手順・日本語市場シグナル抽出方法
 │   ├── evaluation-framework.md       # 5軸評価フレームワーク（採点基準）
 │   └── output-template.md           # レポート出力テンプレート（日本語）
 └── report/
@@ -47,9 +49,18 @@ research-game-idea-skills/
 
 > 「調査対象の年号を教えてください（例：2024年）。」
 
+**調査期間のルール（スクリプトが自動で判断）:**
+
+| 指定年 | 調査範囲 |
+|--------|---------|
+| 過去年（例：2024年を2026年に指定） | 2024-01-01 〜 2024-12-31（暦年） |
+| 現在年（例：2026年を2026年3月に指定） | 2025-03-15 〜 2026-03-15（過去1年の rolling window） |
+
+現在年を指定した場合、まだ1年が終わっていないため、**今日から過去1年分**を対象とします。これにより常にフル1年分のデータを確保できます。
+
 ### Step 2: リサーチ（スクリプト実行）
 
-スクリプトを使ってデータを自動収集します。
+スクリプトを使ってデータを自動収集します（3ソース並行実行）。
 
 ```bash
 # Reddit: 17サブレディットからゲーム関連投稿を収集
@@ -57,12 +68,16 @@ python scripts/fetch_reddit.py --year {year} --output /tmp/reddit_raw.json
 
 # Hacker News: ゲーム関連クエリで投稿を収集
 python scripts/fetch_hn.py --year {year} --output /tmp/hn_raw.json
+
+# Qiita: 日本語ゲーム開発記事を収集（国内市場向け）
+python scripts/fetch_qiita.py --year {year} --output /tmp/qiita_raw.json
 ```
 
-| ソース | スクリプト | 収集対象 |
-|--------|-----------|----------|
-| **Reddit** | `fetch_reddit.py` | r/patientgamers, r/indiegaming, r/iosgaming, r/SuggestAGame 等17サブレディット |
-| **Hacker News** | `fetch_hn.py` | "indie game", "Show HN game", "roguelike" 等15クエリ |
+| ソース | スクリプト | 収集対象 | 強み |
+|--------|-----------|----------|------|
+| **Reddit** | `fetch_reddit.py` | r/patientgamers, r/indiegaming, r/iosgaming 等17サブレディット | 英語圏のペインポイント |
+| **Hacker News** | `fetch_hn.py` | "indie game", "Show HN game", "roguelike" 等15クエリ | 技術者・アーリーアダプターの嗜好 |
+| **Qiita** | `fetch_qiita.py` | 個人開発・インディーゲーム・Unity/Godot 等12クエリ | **国内市場の生の声・DL/売上データ** |
 
 **スクリプトのオプション:**
 
@@ -70,6 +85,10 @@ python scripts/fetch_hn.py --year {year} --output /tmp/hn_raw.json
 # 取得件数・出力先を変更する場合
 python scripts/fetch_reddit.py --year 2024 --limit 50 --output /tmp/reddit_raw.json
 python scripts/fetch_hn.py --year 2024 --min-points 10 --output /tmp/hn_raw.json
+python scripts/fetch_qiita.py --year 2024 --min-likes 5 --output /tmp/qiita_raw.json
+
+# Qiita: 認証トークンで取得上限を引き上げ（任意）
+QIITA_TOKEN=your_token python scripts/fetch_qiita.py --year 2024 --output /tmp/qiita_raw.json
 ```
 
 ### Step 3: ゲームアイデアの合成
@@ -115,7 +134,7 @@ python scripts/fetch_hn.py --year 2024 --min-points 10 --output /tmp/hn_raw.json
 各アイデアには以下が含まれます：
 - 対象プラットフォーム・**ターゲット市場（国内/海外/両方）**・一言ピッチ
 - コンセプト説明（ゲームループ・ターゲット層・面白さ）
-- 調査ソース（Reddit / HN のシグナル）
+- 調査ソース（Reddit / HN / Qiita のシグナル）
 - 穴場である理由
 - 5軸評価表
 - **MVP スコープ**（Must Have / Out of Scope / 完成の定義）
