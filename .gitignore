@@ -1,0 +1,16 @@
+# Environment variables (contains API tokens)
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+.venv/
+venv/
+
+# Node
+node_modules/
+.node-version
+
+# OS
+.DS_Store

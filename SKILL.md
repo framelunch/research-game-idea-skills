@@ -42,10 +42,13 @@ python scripts/fetch_hn.py --year {year} --output /tmp/hn_raw.json
 Then read `/tmp/hn_raw.json` and extract the high-engagement posts. See `references/hackernews-research.md` for guidance on interpreting the results.
 
 ### Qiita articles（日本語市場）
-Run `scripts/fetch_qiita.py` to collect game-related Qiita articles:
+Run `scripts/fetch_qiita.py` to collect game-related Qiita articles.
+
+Load the QIITA_TOKEN from `.env` to enable authenticated access (higher rate limits), then run the script:
 
 ```bash
-python scripts/fetch_qiita.py --year {year} --output /tmp/qiita_raw.json
+QIITA_TOKEN=$(grep '^QIITA_TOKEN=' .env | cut -d= -f2) \
+  python scripts/fetch_qiita.py --year {year} --output /tmp/qiita_raw.json
 ```
 
 Then read `/tmp/qiita_raw.json` and extract high-engagement articles. See `references/qiita-research.md` for guidance on interpreting the results. Qiita is especially valuable for understanding the **Japanese domestic market** — individual developer release reports, unmet needs in Japanese, and Japan-specific opportunities.
@@ -67,7 +70,7 @@ Evaluate each idea using the 5-point framework defined in `references/evaluation
 
 Save the full report as a markdown file to:
 ```
-<skill_directory>/report/{year}/{YYYY-MM-DD}/report.md
+<skill_directory>/report/{year}/{YYYY-MM-DD}/report_{HHmmss}.md
 ```
 
 Where:

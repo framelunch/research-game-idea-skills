@@ -38,6 +38,19 @@ GAME_QUERIES = [
 
 ALGOLIA_BASE = "https://hn.algolia.com/api/v1/search"
 
+# Keywords that confirm a post is game-related (title must match at least one)
+GAME_RELATED_KEYWORDS = [
+    "game", "gaming", "indie", "steam", "mobile game", "puzzle", "roguelike",
+    "rpg", "cozy", "idle", "browser game", "gamedev", "game dev", "unity",
+    "godot", "unreal", "playthrough", "player", "gameplay",
+]
+
+
+def is_game_related(title: str) -> bool:
+    """Return True if the post title is clearly game-related."""
+    title_lower = title.lower()
+    return any(kw in title_lower for kw in GAME_RELATED_KEYWORDS)
+
 
 def date_range_for_year(year: int) -> tuple[int, int]:
     """Return (start_unix, end_unix) for the target year.
@@ -123,6 +136,9 @@ def main():
 
         for hit in hits:
             post = normalize_post(hit, query)
+            # Skip posts that are clearly unrelated to games
+            if not is_game_related(post["title"]):
+                continue
             if post["object_id"] not in seen_ids:
                 seen_ids.add(post["object_id"])
                 all_posts.append(post)

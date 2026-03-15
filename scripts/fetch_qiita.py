@@ -67,7 +67,7 @@ def date_range_for_year(year: int) -> tuple[str, str]:
         return f"{year}-01-01", f"{year}-12-31"
 
 
-def fetch_qiita_articles(query: str, year: int, min_likes: int = 3, token: str = None) -> list[dict]:
+def fetch_qiita_articles(query: str, year: int, min_likes: int = 1, token: str = None) -> list[dict]:
     """Fetch Qiita articles matching a query within the given year."""
     start_date, end_date = date_range_for_year(year)
     date_filter = f"created:>={start_date} created:<={end_date}"
@@ -115,8 +115,8 @@ def main():
     parser = argparse.ArgumentParser(description="Fetch game-related Qiita articles for idea research")
     parser.add_argument("--year", type=int, default=datetime.now().year,
                         help="Target year for filtering articles (default: current year)")
-    parser.add_argument("--min-likes", type=int, default=3,
-                        help="Minimum Qiita likes threshold (default: 3)")
+    parser.add_argument("--min-likes", type=int, default=1,
+                        help="Minimum Qiita likes threshold (default: 1)")
     parser.add_argument("--output", type=str, default="/tmp/qiita_raw.json",
                         help="Output JSON file path")
     parser.add_argument("--queries", type=str, default=None,
