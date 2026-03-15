@@ -89,6 +89,11 @@ python scripts/fetch_reddit.py --year 2024 --limit 50 --output /tmp/reddit_raw.j
 python scripts/fetch_hn.py --year 2024 --min-points 10 --output /tmp/hn_raw.json
 python scripts/fetch_qiita.py --year 2024 --min-likes 5 --output /tmp/qiita_raw.json
 
+# 調査対象を一部のサブレディット／クエリに絞る場合
+python scripts/fetch_reddit.py --year 2024 --subreddits indiegaming,iosgaming,cozygames --output /tmp/reddit_raw.json
+python scripts/fetch_hn.py --year 2024 --queries "indie game,cozy game,roguelike" --output /tmp/hn_raw.json
+python scripts/fetch_qiita.py --year 2024 --queries "インディーゲーム,個人開発 ゲーム リリース" --output /tmp/qiita_raw.json
+
 # Qiita: .env からトークンを読み込んで認証アクセス（取得上限引き上げ）
 QIITA_TOKEN=$(grep '^QIITA_TOKEN=' .env | cut -d= -f2) \
   python scripts/fetch_qiita.py --year 2024 --output /tmp/qiita_raw.json

@@ -61,7 +61,11 @@ def date_range_for_year(year: int) -> tuple[str, str]:
     from datetime import date, timedelta
     today = date.today()
     if year >= today.year:
-        start = today.replace(year=today.year - 1)
+        try:
+            start = today.replace(year=today.year - 1)
+        except ValueError:
+            # Feb 29 in a leap year — fall back to Feb 28
+            start = today.replace(year=today.year - 1, day=28)
         return start.isoformat(), today.isoformat()
     else:
         return f"{year}-01-01", f"{year}-12-31"

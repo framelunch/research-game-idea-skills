@@ -37,8 +37,10 @@ python scripts/fetch_qiita.py --year {year} --output /tmp/qiita_raw.json
 | `Steam ゲーム 個人` | Steam での個人リリース体験 |
 | `個人開発 ゲーム リリース` | 売上・DL数を含む報告 |
 | `ゲームアイデア` | 未実装のアイデア・要望 |
+| `ゲーム 穴場` | 未開拓ニッチ・穴場ジャンルの直接的な言及 |
 | `ゲーム 市場調査` | 市場分析系の記事 |
 | `hyper casual game` | カジュアルゲームの英語混じり記事 |
+| `casual game 個人` | 個人開発カジュアルゲームの実体験 |
 
 ### Qiita Web 検索（補助）
 

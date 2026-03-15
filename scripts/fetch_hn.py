@@ -62,7 +62,11 @@ def date_range_for_year(year: int) -> tuple[int, int]:
     now = datetime.now(timezone.utc)
     if year >= now.year:
         # Rolling window: exactly 1 year back from today
-        one_year_ago = now.replace(year=now.year - 1)
+        try:
+            one_year_ago = now.replace(year=now.year - 1)
+        except ValueError:
+            # Feb 29 in a leap year — fall back to Feb 28
+            one_year_ago = now.replace(year=now.year - 1, day=28)
         return int(one_year_ago.timestamp()), int(now.timestamp())
     else:
         # Completed calendar year

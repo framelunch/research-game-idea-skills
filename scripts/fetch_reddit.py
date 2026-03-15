@@ -93,7 +93,11 @@ def date_range_for_year(year: int) -> tuple[float, float]:
     """
     now = datetime.now(timezone.utc)
     if year >= now.year:
-        one_year_ago = now.replace(year=now.year - 1)
+        try:
+            one_year_ago = now.replace(year=now.year - 1)
+        except ValueError:
+            # Feb 29 in a leap year — fall back to Feb 28
+            one_year_ago = now.replace(year=now.year - 1, day=28)
         return one_year_ago.timestamp(), now.timestamp()
     else:
         start = datetime(year, 1, 1, tzinfo=timezone.utc)

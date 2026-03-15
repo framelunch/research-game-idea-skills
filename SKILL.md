@@ -85,6 +85,17 @@ Create directories as needed.
 
 Then present a summary in the chat in **Japanese**. Include a brief summary table at the top listing all ideas with their overall scores, then provide full detail on each.
 
+## Step 5: Post-Execution Review
+
+After presenting the results, review the skill itself for issues encountered during this run:
+
+1. **Script errors or warnings** — did any script fail, time out, or return unexpectedly empty results? If so, investigate the cause and fix the script.
+2. **Data quality issues** — were the results too thin, off-topic, or missing key signals? Consider adjusting queries, keywords, or filters in the relevant script or reference file.
+3. **Documentation gaps** — does any reference file (`references/*.md`) contradict the actual script behavior (e.g., missing queries, wrong options)? Fix the discrepancy.
+4. **README updates** — if scripts or behavior changed, update `README.md` to reflect the current state.
+
+Apply fixes directly. Only mention issues to the user if a fix requires their input (e.g., missing API token, intentional behavior change).
+
 ---
 
 ## Reference Files
