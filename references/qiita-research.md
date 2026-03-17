@@ -2,49 +2,49 @@
 
 ## Goal
 
-Qiita（キータ）は日本最大級のプログラマー向け技術情報共有サービス。個人開発者やインディーゲーム開発者が自身の開発体験・市場感・リリース報告を投稿することが多く、**国内市場のトレンドや日本語圏の未充足ニーズ**を把握するのに有効なソースです。
+Qiita is Japan's largest technical knowledge-sharing platform for programmers. Individual developers and indie game creators frequently post about their development experiences, market observations, and release reports — making it a valuable source for understanding **Japanese domestic market trends and unmet needs in the Japanese-speaking market**.
 
 ## Why Qiita for Game Research
 
-Qiita の読者・投稿者は日本語ネイティブのエンジニアが中心。以下の情報が得られやすい：
+Qiita readers and contributors are primarily Japanese-speaking engineers. It surfaces:
 
-- **個人開発者のゲームリリース報告**（売上・DL数・苦労話を含む生の体験談）
-- **「こんなゲームが欲しい」「既存ゲームのここが不満」系記事**
-- **Unity / Godot / Unreal での実装記録**（何が難しいか＝参入障壁がわかる）
-- **国内インディーゲーム市場の肌感覚**（海外調査では拾えない日本固有の需要）
+- **Individual developer game release reports** (raw accounts including sales numbers, download counts, and struggles)
+- **"I wish this game existed" / "I'm frustrated with existing games" articles**
+- **Unity / Godot / Unreal implementation logs** (what was hard = signals entry barriers)
+- **Ground-level feel for the domestic indie game market** (Japan-specific demand that overseas research misses)
 
-いいね数が多い記事（50以上）は、同じ課題を抱える開発者・プレイヤーが共感している証拠。
+Articles with high like counts (50+) indicate that many developers or players share the same concern.
 
 ## Search Strategies
 
-### Qiita API（primary）
+### Qiita API (primary)
 
-`scripts/fetch_qiita.py` を使って自動取得する。API は認証なしで利用可能（60 req/時）。
+Use `scripts/fetch_qiita.py` to auto-fetch. The API is accessible without authentication (60 req/hour).
 
 ```bash
 python scripts/fetch_qiita.py --year {year} --output /tmp/qiita_raw.json
 ```
 
-取得対象クエリ（デフォルト）:
+Default queries and their intent:
 
-| クエリ | 狙い |
-|--------|------|
-| `インディーゲーム` | 国内インディー全般 |
-| `ゲーム開発` | 開発者の実体験・苦労 |
-| `Unity ゲーム` | Unity 製ゲームのリリース記録 |
-| `Godot ゲーム` | 軽量エンジン採用の個人作品 |
-| `モバイルゲーム 個人開発` | モバイル×個人開発の交差点 |
-| `Steam ゲーム 個人` | Steam での個人リリース体験 |
-| `個人開発 ゲーム リリース` | 売上・DL数を含む報告 |
-| `ゲームアイデア` | 未実装のアイデア・要望 |
-| `ゲーム 穴場` | 未開拓ニッチ・穴場ジャンルの直接的な言及 |
-| `ゲーム 市場調査` | 市場分析系の記事 |
-| `hyper casual game` | カジュアルゲームの英語混じり記事 |
-| `casual game 個人` | 個人開発カジュアルゲームの実体験 |
+| Query | Target |
+|-------|--------|
+| `インディーゲーム` | Domestic indie games in general |
+| `ゲーム開発` | Developer firsthand experiences and struggles |
+| `Unity ゲーム` | Release logs for Unity-based games |
+| `Godot ゲーム` | Personal projects using lightweight engines |
+| `モバイルゲーム 個人開発` | Mobile × solo dev intersection |
+| `Steam ゲーム 個人` | Personal game release experiences on Steam |
+| `個人開発 ゲーム リリース` | Reports including sales / download figures |
+| `ゲームアイデア` | Unimplemented ideas and feature requests |
+| `ゲーム 穴場` | Direct mentions of untapped niches |
+| `ゲーム 市場調査` | Market analysis articles |
+| `hyper casual game` | English-mixed articles on casual games |
+| `casual game 個人` | Firsthand solo casual game dev experiences |
 
-### Qiita Web 検索（補助）
+### Qiita Web Search (supplementary)
 
-スクリプトで拾えなかった場合は WebSearch / WebFetch で補足：
+If the script returns thin results, supplement with WebSearch / WebFetch:
 
 ```
 site:qiita.com ゲーム 個人開発 {year}
@@ -54,28 +54,28 @@ site:qiita.com "個人開発" "ゲーム" "売上"
 
 ## What Signals to Extract
 
-各記事から以下を読み取る：
+For each article, note:
 
-1. **いいね数（likes_count）** — 30以上で注目、100以上は高需要のサイン
-2. **コメント数** — 議論や質問が多い記事は悩みを共有する開発者が多い証拠
-3. **具体的な数字** — DL数・売上・プレイ時間など、市場規模を示すデータ
-4. **「〇〇がなくて困った」「〇〇がほしかった」** — 未充足ニーズの直接的な表現
-5. **タグ** — `Unity`, `Godot`, `iOS`, `Android`, `Steam` などから対象プラットフォームを把握
+1. **Like count (`likes_count`)** — 30+ is notable; 100+ signals high demand
+2. **Comment count** — many questions and discussion means many developers share the same pain
+3. **Specific numbers** — download counts, revenue, playtime data that indicate market size
+4. **"I struggled because X didn't exist" / "I wished there was Y"** — direct expressions of unmet needs
+5. **Tags** — `Unity`, `Godot`, `iOS`, `Android`, `Steam`, etc. reveal target platforms
 
 ## Patterns That Signal Opportunity
 
-- **「個人開発でX万DL達成」系記事** — ジャンル・プラットフォームの実績データとして活用
-- **「〇〇系のゲームが日本語対応していない」** — 翻訳・ローカライズ需要のシグナル
-- **コメント欄に「自分も同じ課題で悩んでいた」が多い記事** — 共通ペインの存在を示す
-- **「海外では当たり前なのに日本にはない」系の嘆き記事** — 輸入機会のシグナル
-- **低いいね数でも具体的な数字が豊富な記事** — 希少な一次データとして価値が高い
+- **"Reached X downloads as a solo dev" articles** — treat as real market data for genre + platform
+- **"Game Y has no Japanese localization"** — signals translation / localization demand
+- **Articles where many comments say "I had the same problem"** — confirms a shared pain point
+- **"This is standard overseas but doesn't exist in Japan" lament articles** — signals import opportunity
+- **Low-like articles with unusually specific numbers** — rare primary data worth keeping
 
 ## Red Flags
 
-- テクニカルな実装メモのみで、市場・ユーザー視点がない記事
-- 古いバージョンのエンジン・フレームワークの話題（時代遅れのニーズ）
-- 「作ってみた」で終わり、リリースや反応に言及がない記事
+- Articles that are purely technical implementation notes with no market or user perspective
+- Topics referencing outdated engine / framework versions (stale needs)
+- "I made this" posts with no mention of release, reception, or downloads
 
 ## Output
 
-上位 5〜8 件の Qiita 記事を、タイトル・いいね数・コメント数・URL とともにリストアップ。各記事から読み取れる市場シグナルを一言で添える。最も強いシグナルを合成ステップに引き渡す。
+List the top 5–8 Qiita articles with title, like count, comment count, and URL. Add a one-line market signal summary for each. Pass the strongest signals to the synthesis step.

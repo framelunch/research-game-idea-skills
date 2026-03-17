@@ -1,10 +1,10 @@
 # Output Template for Game Ideas
 
-**すべての出力は日本語で記述してください。**
+**Write all output in Japanese.**
 
 ---
 
-## サマリー表（レポートの冒頭に必ず置く）
+## Summary Table (always place at the top of the report)
 
 | # | ゲームアイデア | ターゲット市場 | 実現可能性 | 開発期間 | 収益性 | 競合優位性 | 小規模適性 | 合計 |
 |---|--------------|:------------:|:---------:|:-------:|:------:|:---------:|:---------:|:----:|
@@ -14,9 +14,9 @@
 
 ---
 
-## 各アイデアの詳細
+## Detail Section for Each Idea
 
-以下のブロックをアイデアごとに繰り返す：
+Repeat the following block for each idea:
 
 ---
 
@@ -66,9 +66,9 @@
 
 ---
 
-## 出力上の注意
+## Notes on Output
 
-- サマリー表を必ず冒頭に置き、チームが全アイデアをひと目で比較できるようにする
-- 各アイデアのフォーマットを統一する
-- 特に強い・弱い評価軸があれば「次のアクション案」で補足する
-- 無理にアイデア数を増やさない — 強いアイデアが3つなら3つだけ提示する
+- Always place the summary table at the top so the team can compare all ideas at a glance
+- Use a consistent format for each idea block
+- If a particular dimension scored notably high or low, address it in the next actions section
+- Do not pad the idea count — if there are only 3 strong ideas, present 3

@@ -18,7 +18,7 @@ Rate each game idea across five dimensions on a scale of **1–5**. Be honest �
 
 ---
 
-## 1. 実現可能性 (Feasibility) — Can a small team actually build this?
+## 1. Feasibility (実現可能性) — Can a small team actually build this?
 
 Focus on technical complexity, required assets, and scope.
 
@@ -32,7 +32,7 @@ Focus on technical complexity, required assets, and scope.
 
 ---
 
-## 2. 開発期間 (Development Period) — How quickly can it ship?
+## 2. Development Period (開発期間) — How quickly can it ship?
 
 **Shorter = higher score.** Speed to market matters for small teams with limited runway.
 
@@ -46,7 +46,7 @@ Focus on technical complexity, required assets, and scope.
 
 ---
 
-## 3. 収益性 (Profitability) — Can it make money?
+## 3. Profitability (収益性) — Can it make money?
 
 Consider monetization model, market size, and willingness to pay.
 
@@ -60,7 +60,7 @@ Consider monetization model, market size, and willingness to pay.
 
 ---
 
-## 4. 競合優位性 (Competitive Advantage) — Is the niche truly underserved?
+## 4. Competitive Advantage (競合優位性) — Is the niche truly underserved?
 
 How much room is there to win?
 
@@ -74,7 +74,7 @@ How much room is there to win?
 
 ---
 
-## 5. 小規模開発適性 (Small-Team Suitability) — Is this concept suited to a small indie team?
+## 5. Small-Team Suitability (小規模開発適性) — Is this concept suited to a small indie team?
 
 Some games only work at scale. This dimension asks whether the idea plays to a small team's strengths.
 
