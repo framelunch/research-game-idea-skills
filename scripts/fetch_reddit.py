@@ -39,13 +39,38 @@ GAME_SUBREDDITS = [
     "cozygames",
 ]
 
-# Flairs and keywords that signal pain points / unmet desires
+# Phrases that signal a player pain point or unmet desire.
+# Use multi-word phrases where possible to avoid false positives.
+# Avoid bare single words like "wish" (matches "wishlists"), "need", "help", "want"
+# which appear in unrelated developer milestone posts (e.g. r/solodev wishlist updates).
 PAIN_SIGNAL_KEYWORDS = [
-    "wish", "want", "missing", "why isn't there", "nobody has made",
-    "i can't find", "would love", "looking for", "need", "request",
-    "frustrated", "underserved", "gap", "no game", "doesn't exist",
-    "help", "recommendation", "suggest", "dream game",
+    # Direct "game doesn't exist" signals
+    "i wish there was a game", "wish there was a game",
+    "why isn't there a game", "why is there no game",
+    "nobody has made a game", "no one has made a game",
+    "i can't find a game", "can't find a game",
+    "doesn't exist", "does not exist",
+    "no game that", "no game like",
+    # Desire / request signals
+    "would love a game", "dream game",
+    "looking for a game", "suggest a game",
+    "game request", "game recommendation",
+    # Frustration signals
+    "frustrated with", "i'm frustrated", "so frustrated",
+    "underserved", "missing feature", "market gap",
+    # Cozy/mobile-specific common requests
+    "cozy game that", "mobile game that",
+    "ios game that", "android game that",
+    "i need a game", "i want a game",
+    "i need a cozy", "i want a cozy",
+    "looking for cozy", "looking for a cozy",
+    # Premium / monetization frustration
+    "premium game", "no gacha", "no ads game",
+    "pay to win", "pay-to-win",
 ]
+
+# Subreddits where every post is a game request by definition
+PAIN_POINT_SUBREDDITS = {"SuggestAGame", "tipofmyjoystick"}
 
 HEADERS = {
     "User-Agent": "GameIdeaResearch/1.0 (educational research tool)",
@@ -79,7 +104,17 @@ def fetch_subreddit_posts(subreddit: str, limit: int = 25, sort: str = "top",
 
 
 def is_pain_point(post: dict) -> bool:
-    """Heuristic: does this post signal a user pain point or unmet desire?"""
+    """Heuristic: does this post signal a user pain point or unmet desire?
+
+    Uses two detection strategies:
+    1. Subreddit-based: posts in r/SuggestAGame and r/tipofmyjoystick are
+       game requests by definition.
+    2. Keyword-based: multi-word phrases in the title that signal unmet desire.
+       Single-word keywords are intentionally avoided to prevent false positives
+       (e.g., "wish" matching developer milestone posts about "wishlists").
+    """
+    if post.get("subreddit") in PAIN_POINT_SUBREDDITS:
+        return True
     title = post.get("title", "").lower()
     flair = (post.get("link_flair_text") or "").lower()
     return any(kw in title or kw in flair for kw in PAIN_SIGNAL_KEYWORDS)
@@ -136,11 +171,13 @@ def main():
 
     all_posts = []
     pain_posts = []
+    posts_by_subreddit: dict[str, list[dict]] = {}
 
     for sub in subreddits:
         print(f"  Fetching r/{sub}...")
         posts = fetch_subreddit_posts(sub, limit=args.limit, sort="top", target_year=target_year)
 
+        sub_entries = []
         for post in posts:
             # Apply strict year filter client-side
             if not filter_by_year(post, target_year):
@@ -159,8 +196,13 @@ def main():
                 "is_pain_point": is_pain_point(post),
             }
             all_posts.append(entry)
+            sub_entries.append(entry)
             if entry["is_pain_point"]:
                 pain_posts.append(entry)
+
+        if sub_entries:
+            sub_entries.sort(key=lambda x: x["engagement_score"], reverse=True)
+            posts_by_subreddit[sub] = sub_entries
 
         time.sleep(1)  # be polite to Reddit's API
 
@@ -175,7 +217,12 @@ def main():
         "pain_point_posts": len(pain_posts),
         "subreddits_searched": subreddits,
         "top_pain_points": pain_posts[:50],
+        # Top 100 cross-subreddit posts by engagement (dominated by large subreddits).
+        # Use posts_by_subreddit for niche-specific analysis.
         "all_posts": all_posts[:100],
+        # All fetched posts grouped by subreddit — use this when filtering by genre/market
+        # (e.g. posts_by_subreddit["cozygames"] for cozy game research).
+        "posts_by_subreddit": posts_by_subreddit,
     }
 
     with open(args.output, "w", encoding="utf-8") as f:
