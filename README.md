@@ -6,11 +6,11 @@
 
 ## 概要
 
-Reddit のペインポイント、Hacker News の高エンゲージメント投稿、Qiita の個人開発者記事をリサーチし、モバイルアプリ・Steam 向けの未開拓ゲーム機会を特定します。Qiita により**国内市場（日本語圏）の需要**も把握できます。
+Reddit のペインポイント、Hacker News の高エンゲージメント投稿、Qiita の個人開発者記事、Indie Hackers のファウンダー議論をリサーチし、モバイルアプリ・Steam 向けの未開拓ゲーム機会と**成長中のニッチ市場**を特定します。Qiita により**国内市場（日本語圏）の需要**も、Indie Hackers により**実際に収益が出ているニッチの検証**も行えます。
 
 **トリガーワード例:**
-- 「穴場のゲームを探したい」「ゲームアイデア調査」「インディーゲーム市場」
-- "find game ideas", "market gap", "underserved game niche"
+- 「穴場のゲームを探したい」「ゲームアイデア調査」「インディーゲーム市場」「成長中のニッチ市場」
+- "find game ideas", "market gap", "underserved game niche", "growing niche"
 
 ---
 
@@ -26,12 +26,15 @@ research-game-idea-skills/
 ├── scripts/
 │   ├── fetch_reddit.py               # Reddit からゲーム関連投稿を収集するスクリプト
 │   ├── fetch_hn.py                   # Hacker News からゲーム関連投稿を収集するスクリプト
-│   └── fetch_qiita.py                # Qiita からゲーム関連記事を収集するスクリプト
+│   ├── fetch_qiita.py                # Qiita からゲーム関連記事を収集するスクリプト
+│   └── fetch_indiehackers.py         # Indie Hackers からゲーム関連投稿・プロダクトを収集するスクリプト
 ├── references/
+│   ├── source-weighting.md           # ソース重み付け・フィルター適用ルール・日付範囲ロジック
 │   ├── reddit-research.md            # Reddit 調査手順・対象サブレディット一覧
 │   ├── hackernews-research.md        # Hacker News 調査手順・シグナル抽出方法
 │   ├── qiita-research.md             # Qiita 調査手順・日本語市場シグナル抽出方法
-│   ├── evaluation-framework.md       # 5軸評価フレームワーク（採点基準）
+│   ├── indiehackers-research.md      # Indie Hackers 調査手順・成長中ニッチシグナル抽出方法
+│   ├── evaluation-framework.md       # 5軸評価フレームワーク（採点基準）+ 成長シグナルラベル
 │   └── output-template.md           # レポート出力テンプレート（日本語）
 └── report/
     └── {year}/
@@ -45,24 +48,19 @@ research-game-idea-skills/
 
 スキルを呼び出すと、Claude が以下のステップで調査を進めます。
 
-### Step 1: 調査年号の確認
+### Step 1: 調査パラメーターの確認
 
-実行時に調査対象の年号を日本語で確認します。
+実行時に以下の3点を日本語で確認します。
 
-> 「調査対象の年号を教えてください（例：2024年）。」
+1. **調査対象の年号**（例：2024年）
+2. **ゲームジャンル**（複数選択可。「指定なし」なら全ジャンル対象）
+3. **ターゲット市場**（国内／海外／両方）
 
-**調査期間のルール（スクリプトが自動で判断）:**
-
-| 指定年 | 調査範囲 |
-|--------|---------|
-| 過去年（例：2024年を2026年に指定） | 2024-01-01 〜 2024-12-31（暦年） |
-| 現在年（例：2026年を2026年3月に指定） | 2025-03-15 〜 2026-03-15（過去1年の rolling window） |
-
-現在年を指定した場合、まだ1年が終わっていないため、**今日から過去1年分**を対象とします。これにより常にフル1年分のデータを確保できます。
+ソース重み付け・フィルター適用ルール・日付範囲ロジックは `references/source-weighting.md` に記載されています。
 
 ### Step 2: リサーチ（スクリプト実行）
 
-スクリプトを使ってデータを自動収集します（3ソース並行実行）。
+スクリプトを使ってデータを自動収集します（4ソース並行実行）。
 
 ```bash
 # Reddit: 17サブレディットからゲーム関連投稿を収集
@@ -73,6 +71,9 @@ python scripts/fetch_hn.py --year {year} --output /tmp/hn_raw.json
 
 # Qiita: 日本語ゲーム開発記事を収集（国内市場向け）
 python scripts/fetch_qiita.py --year {year} --output /tmp/qiita_raw.json
+
+# Indie Hackers: ゲーム関連投稿・プロダクトを収集（成長中ニッチ検証向け）
+python scripts/fetch_indiehackers.py --year {year} --output /tmp/ih_raw.json
 ```
 
 | ソース | スクリプト | 収集対象 | 強み |
@@ -80,6 +81,7 @@ python scripts/fetch_qiita.py --year {year} --output /tmp/qiita_raw.json
 | **Reddit** | `fetch_reddit.py` | r/patientgamers, r/indiegaming, r/iosgaming 等17サブレディット | 英語圏のペインポイント |
 | **Hacker News** | `fetch_hn.py` | "indie game", "Show HN game", "roguelike" 等15クエリ | 技術者・アーリーアダプターの嗜好 |
 | **Qiita** | `fetch_qiita.py` | 個人開発・インディーゲーム・Unity/Godot 等12クエリ | **国内市場の生の声・DL/売上データ**（QIITA_TOKEN で認証アクセス推奨） |
+| **Indie Hackers** | `fetch_indiehackers.py` | ゲーム関連グループ投稿・プロダクト情報 | **成長中ニッチの収益検証**（MRR・実ファウンダーのトラクションデータ） |
 
 **スクリプトのオプション:**
 
@@ -88,6 +90,7 @@ python scripts/fetch_qiita.py --year {year} --output /tmp/qiita_raw.json
 python scripts/fetch_reddit.py --year 2024 --limit 50 --output /tmp/reddit_raw.json
 python scripts/fetch_hn.py --year 2024 --min-points 10 --output /tmp/hn_raw.json
 python scripts/fetch_qiita.py --year 2024 --min-likes 5 --output /tmp/qiita_raw.json
+python scripts/fetch_indiehackers.py --year 2024 --min-votes 5 --output /tmp/ih_raw.json
 
 # 調査対象を一部のサブレディット／クエリに絞る場合
 python scripts/fetch_reddit.py --year 2024 --subreddits indiegaming,iosgaming,cozygames --output /tmp/reddit_raw.json

@@ -100,3 +100,11 @@ After rating all five dimensions, compute:
   - Below 8: Weak — probably pass
 
 Present scores in a table alongside the overall grade and a one-line rationale for each score.
+
+---
+
+## Growth Signal Label
+
+If Indie Hackers data confirms that the niche is actively growing (a founder reporting revenue, rapid user growth, or unexpected traction), add the label **「成長中ニッチ確認済み」** to the idea header in the report.
+
+Absence of IH evidence is neutral — do not penalize the idea for it. See `references/source-weighting.md` for details on when to apply this label.

@@ -67,3 +67,17 @@ For each promising thread, note:
 ## Output
 
 Compile a list of 5–10 pain points with source links, engagement metrics, and a brief assessment of whether the niche is truly underserved. Pass the strongest ones to the synthesis step.
+
+---
+
+## `reddit_raw.json` Data Structure
+
+The script output contains three post collections:
+
+| Key | Description |
+|-----|-------------|
+| `top_pain_points` | Posts flagged as pain points, sorted by engagement — **start here** |
+| `all_posts` | Top 100 posts by engagement across all subreddits (dominated by large subreddits like r/gaming) |
+| `posts_by_subreddit` | All fetched posts grouped by subreddit — use this when `{genre_filter}` is specified (e.g. `posts_by_subreddit["cozygames"]` for cozy game research) |
+
+Each post has: `title`, `url`, `subreddit`, `score`, `num_comments`, `engagement_score`, `created_at`, `is_pain_point`.
