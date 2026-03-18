@@ -82,6 +82,23 @@ The filename is `report_{HHmmss}.md`, so multiple runs on the same day are saved
 
 Create directories as needed.
 
+The report must begin with the following metadata section:
+
+```markdown
+## 実行メタデータ
+
+- **実行日時**: {YYYY-MM-DD HH:mm:ss}
+- **スキル**: research-game-skills
+- **与えたプロンプト**:
+  ```
+  {the exact args/prompt passed to this skill via the Skill tool}
+  ```
+- **調査パラメータ**:
+  - 対象年号: {year}
+  - ジャンル: {genre_filter}
+  - 市場: {market_focus}
+```
+
 Then present a summary in the chat in **Japanese**. Include a brief summary table at the top listing all ideas with their overall scores, then provide full detail on each.
 
 ## Step 5: Post-Execution Review
