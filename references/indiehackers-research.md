@@ -15,65 +15,66 @@ IH is where indie developers share **actual revenue numbers, growth trajectories
 
 High vote counts on IH (20+) indicate the topic resonates with practitioners, not just observers.
 
-## Search Strategies
+## アクセス方法
 
-### Group Posts (primary)
-Game-relevant IH groups to check:
-- `/group/gaming` — general game developer discussion
-- `/group/mobile-apps` — mobile game developers
-- `/group/games` — product and launch discussions
-- `/group/indie-games` — indie-specific conversations
+Indie Hackers には公開APIが存在せず、JSレンダリングのため HTMLスクレイピングも機能しない。**WebSearch を直接使う**のが唯一の実用的な方法。
 
-### Post Feed Search
-Search for game-related posts in the global feed:
-```
-game, indie game, mobile game, steam, puzzle, roguelike,
-cozy game, idle game, hypercasual, niche game, growing market
-```
+---
 
-### Products
-Search IH products with queries:
+## Search Strategies（WebSearch クエリ）
+
+### 基本クエリ
 ```
-game, mobile game, indie game, puzzle, roguelike, idle, casual
+site:indiehackers.com game {year}
+site:indiehackers.com indie game revenue {year}
+site:indiehackers.com "game" "monthly revenue" {year}
+indiehackers.com "launched a game" OR "released a game" {year}
+indiehackers.com game niche growing {year}
 ```
 
-The product database includes MRR estimates and maker counts — useful for validating whether a game category is generating real revenue.
+### ジャンル別
+```
+site:indiehackers.com roguelike
+site:indiehackers.com "mobile game" revenue
+site:indiehackers.com "puzzle game" OR "casual game" traction
+site:indiehackers.com "cozy game" OR "idle game"
+site:indiehackers.com "merge game" OR "crafting game"
+```
+
+### 成長ニッチ発見用
+```
+indiehackers.com "unexpected" game audience {year}
+indiehackers.com game "I didn't expect" OR "blew up" {year}
+indiehackers.com indie game "solo dev" revenue {year}
+```
+
+---
 
 ## What Signals to Extract
 
-For each IH post or product, note:
+各 WebSearch 結果から以下を記録する：
 
-1. **Votes and comment count** — 20+ votes is strong engagement from practitioners
-2. **Revenue mentions** — "$X MRR", "reached $X/month", "crossed $X ARR" indicate proven monetization
-3. **Growth trajectory language** — "growing fast", "unexpected audience", "niche I didn't expect"
-4. **Market gap statements** — "nobody was doing X", "I searched and couldn't find a game that..."
-5. **Platform mentions** — which platform (mobile, Steam, browser) is seeing growth in underserved areas
-6. **Team size** — solo founders or 2-person teams who hit traction are high-signal for small-team viability
+1. **Revenue mentions** — "$X MRR", "reached $X/month", "crossed $X ARR" — 収益の実証
+2. **Growth trajectory language** — "growing fast", "unexpected audience", "niche I didn't expect"
+3. **Market gap statements** — "nobody was doing X", "I searched and couldn't find a game that..."
+4. **Platform mentions** — mobile / Steam / browser で成長中の未開拓エリア
+5. **Team size** — solo または 2人チームでトラクションを得た事例
 
 ## Patterns That Signal Growing Niche Markets
 
-- **Founder reports faster-than-expected growth in an unusual genre** — strong signal the niche is heating up
-- **Multiple founders independently mentioning the same underserved market** — consensus signal
-- **"I built this for myself and it blew up"** — indicates latent demand that wasn't being served
-- **Game categories where founders report high revenue with minimal marketing** — the market pulls organically
-- **Cross-platform success of a niche concept** — e.g., a PC game ported to mobile finding a new audience
+- **Founder reports faster-than-expected growth in an unusual genre** — そのニッチが加熱中のシグナル
+- **Multiple founders independently mentioning the same underserved market** — コンセンサスシグナル
+- **"I built this for myself and it blew up"** — 潜在需要が満たされていなかったことの証拠
+- **Game categories where founders report high revenue with minimal marketing** — 市場がオーガニックに引っ張る
+- **Cross-platform success of a niche concept** — PC → モバイル等で新規オーディエンスを発見
 
 ## Red Flags
 
-- Posts where revenue is attributed entirely to a one-time viral moment (e.g., a single YouTuber video)
-- Products with no MRR data and vague claims about "thousands of users"
-- Niches where all recent IH posts show declining interest or failed launches
-- Games built for Western markets with no obvious path to global monetization (if `{market_focus}` = 国内)
-
-## Interpreting `ih_raw.json`
-
-The script output contains two collections:
-
-- **`posts`** — IH forum posts sorted by engagement score (`votes + comments × 2`). Focus on posts with `votes ≥ 10` for strong signals.
-- **`products`** — IH product listings for game-related products. Check `mrr` and `maker_count` to identify categories with solo/small-team success.
-
-When `{genre_filter}` is specified, filter posts and products by matching the genre keywords against `title`, `body_snippet`, and `tags`.
+- 収益がYouTuber一本バズりに起因する一過性のもの
+- MRR データなし・「数千ユーザー」のような曖昧な主張のみ
+- 直近の IH 投稿が軒並み失敗報告になっているニッチ
+- 西洋市場向けで日本語化パスが見えないゲーム（`{market_focus}` = 国内の場合）
 
 ## Output
 
-Compile a list of 5–8 IH posts or products with titles, vote counts, and your read on what market signal each one provides. For products, include any revenue data. Pass the strongest "growing niche" signals to the synthesis step.
+WebSearch 結果から 5〜8 件の IH 投稿を選び、タイトル・URL・市場シグナルの要約をまとめる。収益データがある場合は必ず記録する。最も強い「成長中ニッチ」シグナルを synthesis ステップに渡す。

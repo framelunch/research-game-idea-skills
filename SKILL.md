@@ -53,11 +53,7 @@ Read `/tmp/qiita_raw.json`. See `references/qiita-research.md`.
 
 ### Indie Hackers growing niches
 
-```bash
-python scripts/fetch_indiehackers.py --year {year} --output /tmp/ih_raw.json
-```
-
-Read `/tmp/ih_raw.json`. See `references/indiehackers-research.md`.
+Indie Hackers はAPIもHTMLスクレイピングも利用不可のため、WebSearch で直接調査する。`references/indiehackers-research.md` に記載されたクエリを使って WebSearch を実行し、結果を解釈する。
 
 Don't fabricate findings — if a script returns no useful data, say so.
 

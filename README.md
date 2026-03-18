@@ -27,7 +27,7 @@ research-game-idea-skills/
 │   ├── fetch_reddit.py               # Reddit からゲーム関連投稿を収集するスクリプト
 │   ├── fetch_hn.py                   # Hacker News からゲーム関連投稿を収集するスクリプト
 │   ├── fetch_qiita.py                # Qiita からゲーム関連記事を収集するスクリプト
-│   └── fetch_indiehackers.py         # Indie Hackers からゲーム関連投稿・プロダクトを収集するスクリプト
+│   └── fetch_indiehackers.py         # 未使用（IH はAPI・スクレイピング不可のため WebSearch で代替）
 ├── references/
 │   ├── source-weighting.md           # ソース重み付け・フィルター適用ルール・日付範囲ロジック
 │   ├── reddit-research.md            # Reddit 調査手順・対象サブレディット一覧
@@ -73,7 +73,8 @@ python scripts/fetch_hn.py --year {year} --output /tmp/hn_raw.json
 python scripts/fetch_qiita.py --year {year} --output /tmp/qiita_raw.json
 
 # Indie Hackers: ゲーム関連投稿・プロダクトを収集（成長中ニッチ検証向け）
-python scripts/fetch_indiehackers.py --year {year} --output /tmp/ih_raw.json
+# Indie Hackers: WebSearch で直接調査（スクリプト不使用）
+# → references/indiehackers-research.md のクエリを参照
 ```
 
 | ソース | スクリプト | 収集対象 | 強み |
@@ -81,7 +82,7 @@ python scripts/fetch_indiehackers.py --year {year} --output /tmp/ih_raw.json
 | **Reddit** | `fetch_reddit.py` | r/patientgamers, r/indiegaming, r/iosgaming 等17サブレディット | 英語圏のペインポイント |
 | **Hacker News** | `fetch_hn.py` | "indie game", "Show HN game", "roguelike" 等15クエリ | 技術者・アーリーアダプターの嗜好 |
 | **Qiita** | `fetch_qiita.py` | 個人開発・インディーゲーム・Unity/Godot 等12クエリ | **国内市場の生の声・DL/売上データ**（QIITA_TOKEN で認証アクセス推奨） |
-| **Indie Hackers** | `fetch_indiehackers.py` | ゲーム関連グループ投稿・プロダクト情報 | **成長中ニッチの収益検証**（MRR・実ファウンダーのトラクションデータ） |
+| **Indie Hackers** | WebSearch（スクリプト不使用） | `site:indiehackers.com game` 等のクエリで直接検索 | **成長中ニッチの収益検証**（MRR・実ファウンダーのトラクションデータ）API・スクレイピング不可のため WebSearch が唯一の手段 |
 
 **スクリプトのオプション:**
 
@@ -90,7 +91,6 @@ python scripts/fetch_indiehackers.py --year {year} --output /tmp/ih_raw.json
 python scripts/fetch_reddit.py --year 2024 --limit 50 --output /tmp/reddit_raw.json
 python scripts/fetch_hn.py --year 2024 --min-points 10 --output /tmp/hn_raw.json
 python scripts/fetch_qiita.py --year 2024 --min-likes 5 --output /tmp/qiita_raw.json
-python scripts/fetch_indiehackers.py --year 2024 --min-votes 5 --output /tmp/ih_raw.json
 
 # 調査対象を一部のサブレディット／クエリに絞る場合
 python scripts/fetch_reddit.py --year 2024 --subreddits indiegaming,iosgaming,cozygames --output /tmp/reddit_raw.json
